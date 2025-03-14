@@ -7,6 +7,10 @@ resource "aws_ecr_repository" "ui_service" {
     scan_on_push = true
   }
 
+  lifecycle {
+    prevent_destroy = var.ui_service_ecr_prevent_destroy
+  }
+
   tags = {
     "Last_updated" = module.utils.last_updated
     "Environment"  = var.environment
@@ -19,6 +23,10 @@ resource "aws_ecr_repository" "api_gateway" {
 
   image_scanning_configuration {
     scan_on_push = true
+  }
+
+  lifecycle {
+    prevent_destroy = var.api_gateway_ecr_prevent_destroy
   }
 
   tags = {
@@ -35,6 +43,10 @@ resource "aws_ecr_repository" "backend_service" {
     scan_on_push = true
   }
 
+  lifecycle {
+    prevent_destroy = var.backend_service_ecr_prevent_destroy
+  }
+
   tags = {
     "Last_updated" = module.utils.last_updated
     "Environment"  = var.environment
@@ -47,6 +59,10 @@ resource "aws_ecr_repository" "database_service" {
 
   image_scanning_configuration {
     scan_on_push = true
+  }
+
+  lifecycle {
+    prevent_destroy = var.database_service_ecr_prevent_destroy
   }
 
   tags = {
