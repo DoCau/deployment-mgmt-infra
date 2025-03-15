@@ -38,12 +38,9 @@ jobs:
           pwd
           ls
 
-      - name: Pull terraform.tfstate
+      - name: Terraform init
         working-directory: environments/${{github.event.inputs.environment}}
-        run: |
-          aws s3 cp s3://prj-deployment-mgmt-caudt1/envs/${{github.event.inputs.environment}}/terraform.tfstate terraform.tfstate
-          pwd
-          ls
+        run: terraform init
 
       - name: Check terraform state list
         working-directory: environments/${{github.event.inputs.environment}}
@@ -60,5 +57,6 @@ jobs:
       - name: Terraform destroy
         working-directory: environments/${{github.event.inputs.environment}}
         run: terraform destroy --auto-approve
+
 
       
