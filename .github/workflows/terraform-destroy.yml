@@ -39,7 +39,7 @@ jobs:
           ls
 
       - name: Terraform init
-        working-directory: environments/dev
+        working-directory: environments/${{github.event.inputs.environment}}
         run: terraform init
 
       - name: Check terraform state list
