@@ -49,6 +49,7 @@ jobs:
 
   terraform-apply:
     runs-on: self-hosted
+    needs: terraform-setup
 
     steps:
       - name: Terraform apply
@@ -57,6 +58,7 @@ jobs:
 
   microservices-setup:
     runs-on: self-hosted
+    needs: terraform-apply
 
     steps:
       - name: Update kubeconfig
