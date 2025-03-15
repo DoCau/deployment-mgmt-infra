@@ -47,9 +47,46 @@ jobs:
         working-directory: environments/dev
         run: terraform plan
 
-  #terraform-apply:
-    #steps:
-      #- name: Terraform apply
-        #working-directory: environments/dev
-        #run: terraform apply
-      
+      - name: Terraform apply
+        working-directory: environments/dev
+        run: terraform apply --auto-approve
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region ap-southeast-1 --name deployment-mgmt-dev-eks-cluster
+
+      - name: Create namespace prj-deployment-mgmt
+        run: kubectl create namespace prj-deployment-mgmt
+
+      - name: Create MongoDB persistance volume
+        working-directory: kubectl/dev/database
+        run: kubectl apply -f mongo-pv.yml
+
+      - name: Create MongoDB pod and service
+        working-directory: kubectl/dev/database
+        run: kubectl apply -f mongodb.yml -n prj-deployment-mgmt
+
+      - name: Create database-service pod and service
+        working-directory: kubectl/dev/database-service
+        run: kubectl apply -f database-service.yml -n prj-deployment-mgmt
+
+      - name: Create backend-service pod and service
+        working-directory: kubectl/dev/backend-service
+        run: kubectl apply -f backend-service.yml -n prj-deployment-mgmt
+
+      - name: Create api-gateway pod and service
+        working-directory: kubectl/dev/api-gateway
+        run: kubectl apply -f api-gateway.yml -n prj-deployment-mgmt
+
+      - name: Create ui-service pod and service
+        working-directory: kubectl/dev/ui-service
+        run: kubectl apply -f ui-service.yml -n prj-deployment-mgmt
+
+      - name: Wait for services to warm-up
+        run: sleep 60
+        timeout-minutes: 2
+
+      - name: Get active pods
+        run: kubectl get pods -o wide -n prj-deployment-mgmt
+
+      - name: Get active services
+        run: kubectl get svc -o wide -n prj-deployment-mgmt
