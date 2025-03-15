@@ -29,10 +29,16 @@ jobs:
           role-to-assume: arn:aws:iam::774305578623:role/github-terraform-role
 
       - name: Traverse to work folder
-        run: cd environments/dev
+        run: |
+          cd environments/dev
+          pwd
+          ls
 
       - name: Pull terraform.tfvars
-        run: aws s3 cp s3://prj-deployment-mgmt-caudt1/envs/dev/terraform.tfvars terraform.tfvars
+        run: |
+          aws s3 cp s3://prj-deployment-mgmt-caudt1/envs/dev/terraform.tfvars terraform.tfvars
+          pwd
+          ls
 
       - name: Verify terraform.tfvars location
-        run: ls -lah
+        run: ls -lah && pwd
