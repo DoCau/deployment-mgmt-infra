@@ -38,6 +38,12 @@ jobs:
           pwd
           ls
 
+      - name: Pull terraform.tfstate
+        run: |
+          aws s3 cp s3://prj-deployment-mgmt-caudt1/envs/${{github.event.inputs.environment}}/terraform.tfstate terraform.tfstate
+          pwd
+          ls
+
       - name: Check terraform state list
         run: terraform state list
 
