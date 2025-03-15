@@ -1,0 +1,56 @@
+name: terraform-destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select envs (dev, stag, prod)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - stag
+          - prod
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  terraform-destroy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ap-southeast-1
+          role-to-assume: arn:aws:iam::774305578623:role/github-terraform-role
+
+      - name: Pull terraform.tfvars
+        working-directory: environments/${{github.event.inputs.environment}}
+        run: |
+          aws s3 cp s3://prj-deployment-mgmt-caudt1/envs/${{github.event.inputs.environment}}/terraform.tfvars terraform.tfvars
+          pwd
+          ls
+
+      - name: Check terraform state list
+        run: terraform state list
+
+      - name: Remove ECRs from state
+        working-directory: environments/${{github.event.inputs.environment}}
+        run: |
+          terraform state rm module.ecr.aws_ecr_repository.api_gateway
+          terraform state rm module.ecr.aws_ecr_repository.backend_service
+          terraform state rm module.ecr.aws_ecr_repository.database_service
+          terraform state rm module.ecr.aws_ecr_repository.ui_service
+
+      - name: Terraform destroy
+        working-directory: environments/${{github.event.inputs.environment}}
+        run: terraform destroy --auto-approve
+
+      
