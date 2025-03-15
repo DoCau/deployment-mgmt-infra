@@ -94,3 +94,4 @@ jobs:
 
       - name: Get active services
         run: kubectl get svc -o wide -n prj-deployment-mgmt
+        
