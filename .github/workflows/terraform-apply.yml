@@ -47,20 +47,10 @@ jobs:
         working-directory: environments/dev
         run: terraform plan
 
-  terraform-apply:
-    runs-on: self-hosted
-    needs: terraform-setup
-
-    steps:
       - name: Terraform apply
         working-directory: environments/dev
         run: terraform apply --auto-approve
 
-  microservices-setup:
-    runs-on: self-hosted
-    needs: terraform-apply
-
-    steps:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --region ap-southeast-1 --name deployment-mgmt-dev-eks-cluster
 
