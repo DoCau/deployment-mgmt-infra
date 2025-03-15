@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  terraform-full-apply:
+  terraform-setup:
     runs-on: self-hosted
 
     steps:
@@ -36,4 +36,20 @@ jobs:
           ls
 
       - name: Terraform init
+        working-directory: environments/dev
+        run: terraform init
+
+      - name: Terraform validate
+        working-directory: environments/dev
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: environments/dev
         run: terraform plan
+
+  #terraform-apply:
+    #steps:
+      #- name: Terraform apply
+        #working-directory: environments/dev
+        #run: terraform apply
+      
