@@ -39,12 +39,14 @@ jobs:
           ls
 
       - name: Pull terraform.tfstate
+        working-directory: environments/${{github.event.inputs.environment}}
         run: |
           aws s3 cp s3://prj-deployment-mgmt-caudt1/envs/${{github.event.inputs.environment}}/terraform.tfstate terraform.tfstate
           pwd
           ls
 
       - name: Check terraform state list
+        working-directory: environments/${{github.event.inputs.environment}}
         run: terraform state list
 
       - name: Remove ECRs from state
