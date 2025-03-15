@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-service
+  namespace: prj-deployment-mgmt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database-service
+  template:
+    metadata:
+      labels:
+        app: database-service
+    spec:
+      containers:
+      - name: database-service
+        image: 774305578623.dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-db-service-ecr:database-service-dev-v1.0.1
+        ports:
+        - containerPort: 8081
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+  namespace: prj-deployment-mgmt
+spec:
+  type: ClusterIP
+  selector:
+    app: database-service
+  ports:
+  - port: 8081
+    targetPort: 8081
