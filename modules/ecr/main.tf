@@ -8,7 +8,7 @@ resource "aws_ecr_repository" "ui_service" {
   }
 
   lifecycle {
-    prevent_destroy = var.ui_service_ecr_prevent_destroy
+    prevent_destroy = true
   }
 
   tags = {
@@ -26,7 +26,7 @@ resource "aws_ecr_repository" "api_gateway" {
   }
 
   lifecycle {
-    prevent_destroy = var.api_gateway_ecr_prevent_destroy
+    prevent_destroy = true
   }
 
   tags = {
@@ -44,7 +44,7 @@ resource "aws_ecr_repository" "backend_service" {
   }
 
   lifecycle {
-    prevent_destroy = var.backend_service_ecr_prevent_destroy
+    prevent_destroy = true
   }
 
   tags = {
@@ -62,7 +62,7 @@ resource "aws_ecr_repository" "database_service" {
   }
 
   lifecycle {
-    prevent_destroy = var.database_service_ecr_prevent_destroy
+    prevent_destroy = true
   }
 
   tags = {

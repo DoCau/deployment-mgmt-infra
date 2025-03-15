@@ -108,11 +108,6 @@ module "ecr" {
 
   project_name = var.project_name
   environment  = var.environment
-
-  ui_service_ecr_prevent_destroy       = var.ui_service_ecr_prevent_destroy
-  api_gateway_ecr_prevent_destroy      = var.api_gateway_ecr_prevent_destroy
-  backend_service_ecr_prevent_destroy  = var.backend_service_ecr_prevent_destroy
-  database_service_ecr_prevent_destroy = var.database_service_ecr_prevent_destroy
 }
 
 module "security_groups" {
