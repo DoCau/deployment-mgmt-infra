@@ -2,14 +2,7 @@
 resource "aws_security_group" "public_load_balancer" {
   vpc_id = var.vpc_id
   name   = "${var.project_name}-${var.environment}-public-lb-sg"
-  /*
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = [aws_security_group.node_group.id, aws_security_group.eks.id, aws_security_group.bastion]
-  }
-*/
+
   dynamic "ingress" {
     for_each = var.list_ingresses_of_lb
     content {
@@ -40,14 +33,7 @@ resource "aws_security_group" "public_load_balancer" {
 resource "aws_security_group" "bastion" {
   vpc_id = var.vpc_id
   name   = "${var.project_name}-${var.environment}-bastion-sg"
-  /*
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = [aws_security_group.eks.id, aws_security_group.node_group.id, aws_security_group.public_load_balancer.id]
-  }
-*/
+
   dynamic "ingress" {
     for_each = var.list_ingresses_of_bastion
     content {
@@ -78,14 +64,7 @@ resource "aws_security_group" "bastion" {
 resource "aws_security_group" "eks" {
   vpc_id = var.vpc_id
   name   = "${var.project_name}-${var.environment}-eks-sg"
-  /*
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = [aws_security_group.node_group.id, aws_security_group.public_load_balancer.id, aws_security_group.bastion.id]
-  }
-*/
+
   dynamic "ingress" {
     for_each = var.list_ingresses_of_eks
     content {
@@ -116,14 +95,7 @@ resource "aws_security_group" "eks" {
 resource "aws_security_group" "node_group" {
   vpc_id = var.vpc_id
   name   = "${var.project_name}-${var.environment}-node-group-sg"
-  /*
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = [aws_security_group.eks.id, aws_security_group.public_load_balancer.id, aws_security_group.bastion.id]
-  }
-*/
+
   dynamic "ingress" {
     for_each = var.list_ingresses_of_node_group
     content {
