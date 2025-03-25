@@ -95,27 +95,7 @@ variable "open_port_of_eks_node_that_runs_ui_service" {
   sensitive   = true
   description = "A port number of the EKS node that runs ui-service. Purpose is for load balancer to redirect connections to that port"
 }
-/*
-variable "node_group_name" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Name of the EKS node group"
-}
 
-variable "list_ingresses_of_lb_from_sg" {
-  type = list(object({
-    from_port       = number
-    to_port         = number
-    protocol        = string
-    security_groups = list(string)
-  }))
-
-  nullable    = false
-  sensitive   = true
-  description = "A list of ingresses for load balancer's security group, but using option security_groups instead of cidr_blocks"
-}
-*/
 variable "list_ingresses_of_lb" {
   type = list(object({
     from_port   = number
@@ -156,20 +136,7 @@ variable "bastion_host_instance_type" {
   sensitive   = true
   description = "Type of AMI instance. Usually in format: t2.micro, t2.medium,..."
 }
-/*
-variable "list_ingresses_of_bastion_from_sg" {
-  type = list(object({
-    from_port       = number
-    to_port         = number
-    protocol        = string
-    security_groups = list(string)
-  }))
 
-  nullable    = false
-  sensitive   = true
-  description = "A list of ingresses for Bastion's security group, but using option security_groups instead of cidr_blocks"
-}
-*/
 variable "list_ingresses_of_bastion" {
   type = list(object({
     from_port   = number
@@ -225,42 +192,8 @@ variable "eks_cluster_version" {
   sensitive   = true
   description = "Version of EKS cluster, also version of EKS node group"
 }
-/*
-variable "eks_role_arn" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Amazon Resource Name of EKS aws_iam_role. Example: aws_iam_role.example.arn"
-}
 
-variable "eks_subnet_ids" {
-  type        = list(string)
-  nullable    = false
-  sensitive   = true
-  description = "A list of subnet that will be used for EKS cluser & EKS node group"
-}
-
-variable "iam_roles_of_eks" {
-  nullable    = false
-  sensitive   = true
-  description = "A object value of an iam_role for eks cluster"
-}
-
-variable "iam_roles_of_node_group" {
-  nullable    = false
-  sensitive   = true
-  description = "A object value of an iam_role for eks node group"
-}
-*/
 #-----EKS_NODE_GROUP
-/*
-variable "node_group_role_arn" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Amazon Resource Name of node group's aws_iam_role. Example: aws_iam_role.example.arn"
-}
-*/
 variable "node_group_ami_type" {
   type        = string
   nullable    = false
@@ -324,20 +257,6 @@ variable "node_group_private_key_file_path" {
 }
 
 #-----SECURITY_GROUPS
-/*
-variable "list_ingresses_of_eks_from_sg" {
-  type = list(object({
-    from_port       = number
-    to_port         = number
-    protocol        = string
-    security_groups = list(string)
-  }))
-
-  nullable    = false
-  sensitive   = true
-  description = "A list of ingresses for eks's security group, but using option security_groups instead of cidr_blocks"
-}
-*/
 variable "list_ingresses_of_eks" {
   type = list(object({
     from_port   = number
@@ -363,20 +282,7 @@ variable "list_egresses_of_eks" {
   sensitive   = true
   description = "A list of egresses for eks's security group"
 }
-/*
-variable "list_ingresses_of_node_group_from_sg" {
-  type = list(object({
-    from_port       = number
-    to_port         = number
-    protocol        = string
-    security_groups = list(string)
-  }))
 
-  nullable    = false
-  sensitive   = true
-  description = "A list of ingresses for node group's security group, but using option security_groups instead of cidr_blocks"
-}
-*/
 variable "list_ingresses_of_node_group" {
   type = list(object({
     from_port   = number
@@ -403,7 +309,12 @@ variable "list_egresses_of_node_group" {
   description = "A list of egresses for node group's security group"
 }
 
-
+variable "aws_account_id" {
+  type        = string
+  nullable    = false
+  sensitive   = true
+  description = "ID of the aws account"
+}
 
 /*
 variable "s3_bucket_name" {
