@@ -15,9 +15,15 @@ spec:
     spec:
       containers:
       - name: backend-service
-        image: 774305578623.dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-backend-svc-ecr:backend-service-dev-v1.0.1
+        image: "$(AWS_ACCOUNT_ID).dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-backend-svc-ecr:backend-service-dev-v1.0.1"
         ports:
         - containerPort: 8082
+        env:
+        - name: AWS_ACCOUNT_ID
+          valueFrom:
+            secretKeyRef:
+              name: deployment-mgmt-dev-secrets
+              key: aws-account-id
 
 ---
 apiVersion: v1

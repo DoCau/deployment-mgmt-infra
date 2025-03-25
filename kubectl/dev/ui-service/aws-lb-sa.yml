@@ -1,7 +1,8 @@
+#this file has been misconfigured, please do not use
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: aws-load-balancer-controller
   namespace: kube-system
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::774305578623:role/AWSLoadBalancerControllerIAMRole
+    eks.amazonaws.com/role-arn: "arn:aws:iam::774305578623:role/AWSLoadBalancerControllerIAMRole"
