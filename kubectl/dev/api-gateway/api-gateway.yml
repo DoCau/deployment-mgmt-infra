@@ -15,15 +15,9 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: "$(AWS_ACCOUNT_ID).dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-api-gateway-ecr:api-gateway-dev-v1.0.1"
+        image: "418272754610.dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-api-gateway-ecr:v1.0.0"
         ports:
         - containerPort: 8080
-        env:
-        - name: AWS_ACCOUNT_ID
-          valueFrom:
-            secretKeyRef:
-              name: deployment-mgmt-dev-secrets
-              key: aws-account-id
 
 ---
 apiVersion: v1
