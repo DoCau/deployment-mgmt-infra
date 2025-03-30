@@ -345,6 +345,7 @@ resource "aws_instance" "jenkins_worker" {
   #Add credentials to aws cli
   cd "$userdir"
   mkdir -p "$userdir/.aws"
+  sudo chmod 777 "$userdir/.aws"
   aws configure set aws_access_key_id ${var.aws_access_key_id}
   aws configure set aws_secret_access_key ${var.aws_secret_access_key}
   aws configure set region ${var.aws_access_key_region}
