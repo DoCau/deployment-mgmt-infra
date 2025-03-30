@@ -1,0 +1,95 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'ENV', choices: ['dev', 'stag', 'prod'], description: 'Select enviroment to build & push')
+        choice(name: 'REPO_TYPE', choices: ['ui-service', 'api-gateway', 'backend-service', 'database-service'], description: 'Select type of repository to build & push')
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Specify branch to build', trim: true)
+        string(name: 'AWS_ACCOUNT_ID',description: 'Specify aws account id to perform build & push', trim: true)
+        string(name: 'REGION', description: 'Specify region to perform build & push', trim: true)
+        string(name: 'TAG', description: 'Specify tag for versioning images', trim: true)
+    }
+
+    enviroment {
+        ECR_REPO_NAME = "deployment-mgmt-${params.ENV}-${params.REPO_TYPE}-ecr"
+        IMAGE_NAME = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com/${ECR_REPO_NAME}:${params.TAG}"
+    }
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    stages {
+        stage('Check Out Repository') {
+            steps {
+                script {
+                    def repoURLs = [
+                        'ui-service': 'https://github.com/DoCau/deployment-mgmt-ui-service.git',
+                        'api-gateway': 'https://github.com/DoCau/deployment-mgmt-api-gateway.git',
+                        'backend-service': 'https://github.com/DoCau/deployment-mgmt-backend-service.git',
+                        'database-service': 'https://github.com/DoCau/deployment-mgmt-database-service.git'
+                    ]
+
+                    def repoURL = repoURLs["${params.REPO_TYPE}"]
+
+                    if (repoURL == null) {
+                        error("Invalid repository type: ${params.REPO_TYPE}")
+                    }
+
+                    echo "Cloning repository ${params.REPO_TYPE} with url ${repoURL}..."
+
+                    git branch: "${params.BRANCH}",
+                        credentialsId: 'MICROSERVICES_GITHUB_CREDENTIAL',
+                        url: "${repoURL}"
+                }
+            }
+        }
+
+        stage('Check Docker Status') {
+            steps {
+                script {
+                    //commands systemctl... returns 0 if systemctl thinks Docker is running
+                    def isDockerRunning = sh(script: "systemctl is-active --quiet docker", returnStatus: true) == 0
+                }
+
+                if (!isDockerRunning) {
+                    echo "Starting Docker..."
+
+                    sh 'sudo systemctl start docker'
+                }
+            }
+        }
+
+        stage('Clean Previous Image') {
+            steps {
+                script {
+                    def isImageExisted = sh(script: "docker images -q ${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com/${env.ECR_REPO_NAME}", returnStdout: true).trim()
+
+                    if (isImageExisted) {
+                        echo "Removing existing Docker image from ${env.ECR_REPO_NAME}..."
+
+                        sh "docker rmi -f ${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com/${env.ECR_REPO_NAME}"
+                    }
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo "Building Docker image ${env.IMAGE_NAME}..."
+
+                sh "docker build -t ${env.IMAGE_NAME} -f ./${params.REPO_TYPE}/Dockerfile ./${params.REPO_TYPE}"
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                echo "Pusing image ${env.IMAGE_NAME} to ${env.ECR_REPO_NAME} ECR repository..."
+
+                sh "aws ecr get-login-password --region ${params.REGION} | docker login --username AWS --password-stdin ${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com"
+
+                sh "docker push ${env.IMAGE_NAME}"
+            }
+        }
+    }
+}
