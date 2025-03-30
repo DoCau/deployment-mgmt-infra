@@ -76,9 +76,24 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                echo "Building Docker image ${env.IMAGE_NAME}..."
+                script {
+                    def repoActualNames = [
+                        'ui-service': 'deployment-mgmt-ui-service',
+                        'api-gateway': 'deployment-mgmt-api-gateway',
+                        'backend-service': 'deployment-mgmt-backend-service',
+                        'database-service': 'deployment-mgmt-database-service'
+                    ]
 
-                sh "docker build -t ${env.IMAGE_NAME} -f ./${params.REPO_TYPE}/Dockerfile ./${params.REPO_TYPE}"
+                    def repoActualName = repoActualNames["${params.REPO_TYPE}"]
+
+                    if (repoActualName == null) {
+                        error("Invalid repository name: ${repoActualName}")
+                    }
+
+                    echo "Building Docker image ${env.IMAGE_NAME}..."
+
+                    sh "docker build -t ${env.IMAGE_NAME} -f ./${repoActualName}/Dockerfile ./${repoActualName}"
+                }
             }
         }
 
