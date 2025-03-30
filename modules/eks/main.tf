@@ -48,7 +48,7 @@ resource "aws_eks_node_group" "this" {
 
   remote_access {
     ec2_ssh_key               = aws_key_pair.node_group.key_name
-    source_security_group_ids = [var.node_group_security_group_id]
+    source_security_group_ids = [var.node_group_security_group_id, var.bastion_security_group_id]
   }
 
   tags = {
