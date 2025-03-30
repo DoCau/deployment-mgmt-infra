@@ -10,7 +10,7 @@ pipeline {
         string(name: 'TAG', description: 'Specify tag for versioning images', trim: true)
     }
 
-    enviroment {
+    environment {
         ECR_REPO_NAME = "deployment-mgmt-${params.ENV}-${params.REPO_TYPE}-ecr"
         IMAGE_NAME = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com/${ECR_REPO_NAME}:${params.TAG}"
     }
@@ -50,12 +50,12 @@ pipeline {
                 script {
                     //commands systemctl... returns 0 if systemctl thinks Docker is running
                     def isDockerRunning = sh(script: "systemctl is-active --quiet docker", returnStatus: true) == 0
-                }
 
-                if (!isDockerRunning) {
-                    echo "Starting Docker..."
+                    if (!isDockerRunning) {
+                        echo "Starting Docker..."
 
-                    sh 'sudo systemctl start docker'
+                        sh 'sudo systemctl start docker'
+                    }
                 }
             }
         }
