@@ -94,10 +94,11 @@ pipeline {
                     echo "Building Docker image ${env.IMAGE_NAME}..."
 
                     sh '''
-                    cd "${env.PIPELINE_WORK_DIR}"
-                    ls
-                    pwd
-                    docker build -t ${env.IMAGE_NAME} -f ./${repoActualName}/Dockerfile ./${repoActualName}
+                        #!/bin/bash
+                        cd "$PIPELINE_WORK_DIR"
+                        echo ls
+                        echo pwd
+                        docker build -t $IMAGE_NAME -f ./${repoActualName}/Dockerfile ./${repoActualName}
                     '''
                 }
             }
@@ -108,11 +109,12 @@ pipeline {
                 echo "Pusing image ${env.IMAGE_NAME} to ${env.ECR_REPO_NAME} ECR repository..."
 
                 sh '''
-                    cd "${env.PIPELINE_WORK_DIR}"
-                    ls
-                    pwd
-                    aws ecr get-login-password --region ${params.REGION} | docker login --username AWS --password-stdin ${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com
-                    docker push ${env.IMAGE_NAME}
+                    #!/bin/bash
+                    cd "$PIPELINE_WORK_DIR"
+                    echo ls
+                    echo pwd
+                    aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.${params.REGION}.amazonaws.com"
+                    docker push "$IMAGE_NAME"
                 '''
             }
         }
