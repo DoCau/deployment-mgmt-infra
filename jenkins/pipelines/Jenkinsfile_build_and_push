@@ -11,6 +11,7 @@ pipeline {
     }
 
     environment {
+        PIPELINE_WORK_DIR = "/home/ubuntu/workspace/deployment-mgmt-build-and-push"//if name of the pipeline changes, this value must be update as well
         ECR_REPO_NAME = "deployment-mgmt-${params.ENV}-${params.REPO_TYPE}-ecr"
         IMAGE_NAME = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com/${ECR_REPO_NAME}:${params.TAG}"
     }
@@ -92,7 +93,12 @@ pipeline {
 
                     echo "Building Docker image ${env.IMAGE_NAME}..."
 
-                    sh "docker build -t ${env.IMAGE_NAME} -f ./${repoActualName}/Dockerfile ./${repoActualName}"
+                    sh '''
+                    cd "${env.PIPELINE_WORK_DIR}"
+                    ls
+                    pwd
+                    docker build -t ${env.IMAGE_NAME} -f ./${repoActualName}/Dockerfile ./${repoActualName}
+                    '''
                 }
             }
         }
@@ -101,9 +107,13 @@ pipeline {
             steps {
                 echo "Pusing image ${env.IMAGE_NAME} to ${env.ECR_REPO_NAME} ECR repository..."
 
-                sh "aws ecr get-login-password --region ${params.REGION} | docker login --username AWS --password-stdin ${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com"
-
-                sh "docker push ${env.IMAGE_NAME}"
+                sh '''
+                    cd "${env.PIPELINE_WORK_DIR}"
+                    ls
+                    pwd
+                    aws ecr get-login-password --region ${params.REGION} | docker login --username AWS --password-stdin ${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.REGION}.amazonaws.com
+                    docker push ${env.IMAGE_NAME}
+                '''
             }
         }
     }
