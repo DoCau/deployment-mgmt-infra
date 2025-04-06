@@ -34,6 +34,13 @@ resource "aws_security_group" "bastion" {
   vpc_id = var.vpc_id
   name   = "${var.project_name}-${var.environment}-bastion-sg"
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [module.utils.local_machine_cidr]
+  }
+
   dynamic "ingress" {
     for_each = var.list_ingresses_of_bastion
     content {

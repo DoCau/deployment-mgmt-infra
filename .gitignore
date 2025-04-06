@@ -42,3 +42,6 @@ terraform.rc
 
 #Ignore all .properties files
 *.properties
+
+#Ignore all .terraform.lock.hcl files
+*.terraform.lock.hcl
