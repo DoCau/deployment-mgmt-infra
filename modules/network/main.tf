@@ -119,58 +119,7 @@ resource "aws_route_table_association" "private_route_subnet_2" {
   subnet_id      = aws_subnet.private_2.id
   route_table_id = aws_route_table.private.id
 }
-/*
-#-----LOAD_BALANCER_AND_RELATED_RESOURCES
-resource "aws_lb" "public" {
-  name                       = "${var.project_name}-${var.environment}-public-lb"
-  load_balancer_type         = "application"
-  internal                   = false
-  enable_deletion_protection = false
-  subnets                    = [aws_subnet.public.id, aws_subnet.nat.id]
-  security_groups            = [var.lb_security_group_id]
-//this access_logs is misconfigured
-  access_logs {
-    bucket  = var.s3_bucket_name
-    prefix  = var.s3_path_to_lb_logs
-    enabled = true
-  }
 
-  tags = {
-    "Last_updated" = module.utils.last_updated
-    "Environment"  = var.environment
-  }
-}
-
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.public.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.ui_service.arn
-  }
-
-  tags = {
-    "Name"         = "${var.project_name}-${var.environment}-http-lb-listener"
-    "Last_updated" = module.utils.last_updated
-    "Environment"  = var.environment
-  }
-}
-
-resource "aws_lb_target_group" "ui_service" {
-  name        = "${var.project_name}-${var.environment}-lb-target-gr"
-  vpc_id      = aws_vpc.vpc.id
-  port        = var.open_port_of_eks_node_that_runs_ui_service
-  protocol    = "HTTP"
-  target_type = "ip"
-
-  tags = {
-    "Last_updated" = module.utils.last_updated
-    "Environment"  = var.environment
-  }
-}
-*/
 #-----BASTION_HOST_AND_RELATED_RESOURCES
 resource "aws_instance" "bastion_host" {
   ami             = var.bastion_host_ami

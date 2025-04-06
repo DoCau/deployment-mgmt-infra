@@ -30,15 +30,7 @@ module "network" {
   #INTERNET_GATEWAY
   internet_gateway_desired_destination_cidr_block = var.internet_gateway_desired_destination_cidr_block
   #ROUTE_TABLE
-  /*
-  #LOAD_BALANCER
-  s3_bucket_name     = var.s3_bucket_name
-  s3_path_to_lb_logs = var.s3_path_to_lb_logs
 
-  lb_security_group_id = module.security_groups.lb_security_group_id
-
-  open_port_of_eks_node_that_runs_ui_service = var.open_port_of_eks_node_that_runs_ui_service
-*/
   #BASTION_HOST
   bastion_host_ami           = var.bastion_host_ami
   bastion_host_instance_type = var.bastion_host_instance_type
@@ -82,7 +74,6 @@ module "eks_cluster" {
   node_group_public_key_file_path  = var.node_group_public_key_file_path
   node_group_private_key_file_path = var.node_group_private_key_file_path
 
-  //  lb_security_group_id      = module.security_groups.lb_security_group_id
   bastion_security_group_id = module.security_groups.bastion_security_group_id
 }
 
@@ -91,10 +82,7 @@ module "iam_role" {
 
   project_name = var.project_name
   environment  = var.environment
-  /*
-  s3_bucket_name     = var.s3_bucket_name
-  s3_path_to_lb_logs = var.s3_path_to_lb_logs
-*/
+
   ui_service_ecr_arn       = module.ecr.ui_service_ecr_arn
   api_gateway_ecr_arn      = module.ecr.api_gateway_ecr_arn
   backend_service_ecr_arn  = module.ecr.backend_service_ecr_arn
@@ -124,11 +112,7 @@ module "security_groups" {
 
   list_ingresses_of_node_group = var.list_ingresses_of_node_group
   list_egresses_of_node_group  = var.list_egresses_of_node_group
-  /*
-  list_ingresses_of_lb = var.list_ingresses_of_lb
-  list_egresses_of_lb  = var.list_egresses_of_lb
-*/
-  //  list_ingresses_of_bastion = var.list_ingresses_of_bastion
+
   list_egresses_of_bastion = var.list_egresses_of_bastion
 }
 
