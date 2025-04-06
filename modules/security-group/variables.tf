@@ -17,7 +17,7 @@ variable "vpc_id" {
   nullable    = false
   description = "ID of vpc"
 }
-
+/*
 #LOAD_BALANCER
 variable "list_ingresses_of_lb" {
   type = list(object({
@@ -44,8 +44,9 @@ variable "list_egresses_of_lb" {
   sensitive   = true
   description = "A list of egresses for the load balancer's security group"
 }
-
+*/
 #BASTION
+/*
 variable "list_ingresses_of_bastion" {
   type = list(object({
     from_port   = number
@@ -58,7 +59,7 @@ variable "list_ingresses_of_bastion" {
   sensitive   = true
   description = "A list of ingresses for the Bastion's security group"
 }
-
+*/
 variable "list_egresses_of_bastion" {
   type = list(object({
     from_port   = number

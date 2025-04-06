@@ -63,7 +63,7 @@ resource "aws_subnet" "private_2" {
 }
 
 #-----INTERNET_GATEWAY_AND_INTERNET_ROUTE
-resource "aws_internet_gateway" "internet_to_load_balancer" {
+resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
@@ -73,9 +73,9 @@ resource "aws_internet_gateway" "internet_to_load_balancer" {
   }
 }
 
-resource "aws_route" "internet_route_to_load_balancer" {
+resource "aws_route" "internet_to_public_subnet" {
   route_table_id         = aws_route_table.public.id
-  gateway_id             = aws_internet_gateway.internet_to_load_balancer.id
+  gateway_id             = aws_internet_gateway.this.id
   destination_cidr_block = var.internet_gateway_desired_destination_cidr_block
 }
 
@@ -119,7 +119,7 @@ resource "aws_route_table_association" "private_route_subnet_2" {
   subnet_id      = aws_subnet.private_2.id
   route_table_id = aws_route_table.private.id
 }
-
+/*
 #-----LOAD_BALANCER_AND_RELATED_RESOURCES
 resource "aws_lb" "public" {
   name                       = "${var.project_name}-${var.environment}-public-lb"
@@ -128,13 +128,13 @@ resource "aws_lb" "public" {
   enable_deletion_protection = false
   subnets                    = [aws_subnet.public.id, aws_subnet.nat.id]
   security_groups            = [var.lb_security_group_id]
-  /*
+//this access_logs is misconfigured
   access_logs {
     bucket  = var.s3_bucket_name
     prefix  = var.s3_path_to_lb_logs
     enabled = true
   }
-*/
+
   tags = {
     "Last_updated" = module.utils.last_updated
     "Environment"  = var.environment
@@ -170,7 +170,7 @@ resource "aws_lb_target_group" "ui_service" {
     "Environment"  = var.environment
   }
 }
-
+*/
 #-----BASTION_HOST_AND_RELATED_RESOURCES
 resource "aws_instance" "bastion_host" {
   ami             = var.bastion_host_ami

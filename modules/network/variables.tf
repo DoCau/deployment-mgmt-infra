@@ -73,7 +73,7 @@ variable "internet_gateway_desired_destination_cidr_block" {
   default     = "0.0.0.0/0"
   description = "CIDR block to specify allowed-incoming-ip from internet gateway to public route table"
 }
-
+/*
 #-----LOAD_BALANCER
 variable "s3_bucket_name" {
   type        = string
@@ -102,7 +102,7 @@ variable "open_port_of_eks_node_that_runs_ui_service" {
   sensitive   = true
   description = "A port number of the EKS node that runs ui-service. Purpose is for load balancer to redirect connections to that port"
 }
-
+*/
 #-----BASTION_HOST
 variable "bastion_host_ami" {
   type        = string

@@ -10,13 +10,13 @@ output "bastion_host_private_ip" {
   sensitive   = false
   description = "The private IP of bastion host, this ip has nothing to do with EIP"
 }
-
+/*
 output "load_balancer_public_ip" {
   value       = module.network.load_balancer_public_ip
   sensitive   = false
   description = "DNS of load balancer. Access this DNS to view the page of project"
 }
-
+*/
 output "nat_gateway_public_ip" {
   value       = module.network.nat_gateway_public_ip
   sensitive   = false

@@ -22,13 +22,13 @@ variable "vpc_cidr_block" {
 variable "public_subnet_cidr_block" {
   type        = string
   nullable    = false
-  description = "CIDR block of public lb-attached-subnet"
+  description = "CIDR block of public bastion-attached-subnet"
 }
 
 variable "public_subnet_availability_zone" {
   type        = string
   nullable    = false
-  description = "Availability zone of public lb-attached-subnet. Example: ap-southeast-2a"
+  description = "Availability zone of public bastion-attached-subnet. Example: ap-southeast-2a"
 }
 
 variable "nat_subnet_cidr_block" {
@@ -52,7 +52,7 @@ variable "private_subnet_1_cidr_block" {
 variable "private_subnet_1_availability_zone" {
   type        = string
   nullable    = false
-  description = "Availability zone of private subnet-1. Recommend using same zone with public lb-attached-subnet"
+  description = "Availability zone of private subnet-1. Recommend using same zone with public bastion-attached-subnet"
 }
 
 variable "private_subnet_2_cidr_block" {
@@ -73,7 +73,7 @@ variable "internet_gateway_desired_destination_cidr_block" {
   default     = "0.0.0.0/0"
   description = "CIDR block to specify allowed-incoming-ip from internet gateway to public route table"
 }
-
+/*
 #-----LOAD_BALANCER
 variable "s3_bucket_name" {
   type        = string
@@ -121,7 +121,7 @@ variable "list_egresses_of_lb" {
   sensitive   = true
   description = "A list of egresses for the load balancer's security group"
 }
-
+*/
 #-----BASTION_HOST
 variable "bastion_host_ami" {
   type        = string
@@ -136,7 +136,7 @@ variable "bastion_host_instance_type" {
   sensitive   = true
   description = "Type of AMI instance. Usually in format: t2.micro, t2.medium,..."
 }
-
+/*
 variable "list_ingresses_of_bastion" {
   type = list(object({
     from_port   = number
@@ -149,7 +149,7 @@ variable "list_ingresses_of_bastion" {
   sensitive   = true
   description = "A list of ingresses for the Bastion's security group"
 }
-
+*/
 variable "list_egresses_of_bastion" {
   type = list(object({
     from_port   = number
