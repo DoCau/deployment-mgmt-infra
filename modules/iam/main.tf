@@ -219,23 +219,6 @@ resource "aws_iam_role" "aws_lb_controller_role" {
     }]
   })
 }
-/*
-resource "aws_iam_policy_attachment" "aws_lb_controller_policy" {
-  name       = "AWSLoadBalancerControllerIAMPolicyAttachment"
-  roles      = [aws_iam_role.aws_lb_controller_role.name]
-  policy_arn = data.aws_iam_policy.aws_lb_controller_policy.arn
-}
-
-resource "kubernetes_service_account" "aws_lb_controller_sa" {
-  metadata {
-    name      = "aws-load-balancer-controller"
-    namespace = "kube-system"
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.aws_lb_controller_role.arn
-    }
-  }
-}
-*/
 
 resource "aws_iam_role_policy_attachment" "aws_lb_controller" {
   policy_arn = aws_iam_policy.aws_lb_controller_policy.arn
@@ -247,8 +230,4 @@ resource "aws_iam_policy" "aws_lb_controller_policy" {
   description = "IAM Policy for AWS Load Balancer Controller"
   policy      = file("${path.module}/aws-load-balancer-controller-policy.json")
 }
-/*
-data "aws_iam_policy" "aws_lb_controller_policy" {
-  name = "AWSLoadBalancerControllerIAMPolicy"
-}
-*/
+
