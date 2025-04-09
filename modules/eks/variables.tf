@@ -138,12 +138,6 @@ variable "node_group_security_group_id" {
 }
 
 #-----SECURITY_GROUPS
-variable "lb_security_group_id" {
-  type        = string
-  sensitive   = true
-  nullable    = false
-  description = "ID of security group of load balancer instance"
-}
 
 variable "bastion_security_group_id" {
   type        = string

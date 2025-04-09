@@ -37,20 +37,6 @@ variable "database_service_ecr_arn" {
   sensitive   = true
   description = "ARN of ECR db-service"
 }
-#-----LOAD_BALANCER
-variable "s3_bucket_name" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Name of s3 bucket to push load balancer access logs to"
-}
-
-variable "s3_path_to_lb_logs" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Path to load balancer logs folder on s3 bucket"
-}
 
 variable "eks_oidc_arn" {
   type        = string

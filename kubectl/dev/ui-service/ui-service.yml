@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: ui-service
-        image: "418272754610.dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-ui-service-ecr:v1.0.2"
+        image: "418272754610.dkr.ecr.ap-southeast-1.amazonaws.com/deployment-mgmt-dev-ui-service-ecr:v1.0.0"
         ports:
         - containerPort: 80
 

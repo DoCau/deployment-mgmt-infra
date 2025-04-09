@@ -74,35 +74,6 @@ variable "internet_gateway_desired_destination_cidr_block" {
   description = "CIDR block to specify allowed-incoming-ip from internet gateway to public route table"
 }
 
-#-----LOAD_BALANCER
-variable "s3_bucket_name" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Name of s3 bucket to push load balancer access logs to"
-}
-
-variable "s3_path_to_lb_logs" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Path to load balancer logs folder on s3 bucket"
-}
-
-variable "lb_security_group_id" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "ID of security group of load balancer instance"
-}
-
-variable "open_port_of_eks_node_that_runs_ui_service" {
-  type        = number
-  nullable    = false
-  sensitive   = true
-  description = "A port number of the EKS node that runs ui-service. Purpose is for load balancer to redirect connections to that port"
-}
-
 #-----BASTION_HOST
 variable "bastion_host_ami" {
   type        = string

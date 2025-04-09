@@ -60,42 +60,6 @@ resource "aws_iam_role_policy_attachment" "node-ecr" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-
-#-----IAM_ROLE_FOR_LOAD_BALANCER_TO_WRITE_LOGS_INTO_S3_BUCKET
-resource "aws_s3_bucket_policy" "load_balancer_logs" {
-  bucket = var.s3_bucket_name
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "elasticloadbalancing.amazonaws.com"
-        }
-        Action   = "s3:PutObject"
-        Resource = "arn:aws:s3:::${var.s3_bucket_name}/${var.s3_path_to_lb_logs}/*"
-        Condition = {
-          StringEquals = {
-            "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
-          }
-        }
-      },
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-        }
-        Action   = "s3:PutObject"
-        Resource = "arn:aws:s3:::${var.s3_bucket_name}/${var.s3_path_to_lb_logs}/*"
-      }
-    ]
-  })
-}
-
-//the below command is used to get account id
-data "aws_caller_identity" "current" {}
-
 #-----IAM_ROLE_FOR_NODE_GROUP_TO_PULL_IMAGES_FROM_ECR
 resource "aws_iam_policy" "ui_service_ecr_pull_access" {
   name        = "${var.project_name}-${var.environment}-nodes-ui-ecr"

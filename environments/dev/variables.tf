@@ -22,13 +22,13 @@ variable "vpc_cidr_block" {
 variable "public_subnet_cidr_block" {
   type        = string
   nullable    = false
-  description = "CIDR block of public lb-attached-subnet"
+  description = "CIDR block of public bastion-attached-subnet"
 }
 
 variable "public_subnet_availability_zone" {
   type        = string
   nullable    = false
-  description = "Availability zone of public lb-attached-subnet. Example: ap-southeast-2a"
+  description = "Availability zone of public bastion-attached-subnet. Example: ap-southeast-2a"
 }
 
 variable "nat_subnet_cidr_block" {
@@ -52,7 +52,7 @@ variable "private_subnet_1_cidr_block" {
 variable "private_subnet_1_availability_zone" {
   type        = string
   nullable    = false
-  description = "Availability zone of private subnet-1. Recommend using same zone with public lb-attached-subnet"
+  description = "Availability zone of private subnet-1. Recommend using same zone with public bastion-attached-subnet"
 }
 
 variable "private_subnet_2_cidr_block" {
@@ -74,54 +74,6 @@ variable "internet_gateway_desired_destination_cidr_block" {
   description = "CIDR block to specify allowed-incoming-ip from internet gateway to public route table"
 }
 
-#-----LOAD_BALANCER
-variable "s3_bucket_name" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Name of s3 bucket to push load balancer access logs to"
-}
-
-variable "s3_path_to_lb_logs" {
-  type        = string
-  nullable    = false
-  sensitive   = true
-  description = "Path to load balancer logs folder on s3 bucket"
-}
-
-variable "open_port_of_eks_node_that_runs_ui_service" {
-  type        = number
-  nullable    = false
-  sensitive   = true
-  description = "A port number of the EKS node that runs ui-service. Purpose is for load balancer to redirect connections to that port"
-}
-
-variable "list_ingresses_of_lb" {
-  type = list(object({
-    from_port   = number
-    to_port     = number
-    protocol    = string
-    cidr_blocks = list(string)
-  }))
-
-  nullable    = false
-  sensitive   = true
-  description = "A list of ingresses for the load balancer's security group"
-}
-
-variable "list_egresses_of_lb" {
-  type = list(object({
-    from_port   = number
-    to_port     = number
-    protocol    = string
-    cidr_blocks = list(string)
-  }))
-
-  nullable    = false
-  sensitive   = true
-  description = "A list of egresses for the load balancer's security group"
-}
-
 #-----BASTION_HOST
 variable "bastion_host_ami" {
   type        = string
@@ -135,19 +87,6 @@ variable "bastion_host_instance_type" {
   nullable    = false
   sensitive   = true
   description = "Type of AMI instance. Usually in format: t2.micro, t2.medium,..."
-}
-
-variable "list_ingresses_of_bastion" {
-  type = list(object({
-    from_port   = number
-    to_port     = number
-    protocol    = string
-    cidr_blocks = list(string)
-  }))
-
-  nullable    = false
-  sensitive   = true
-  description = "A list of ingresses for the Bastion's security group"
 }
 
 variable "list_egresses_of_bastion" {
@@ -316,11 +255,3 @@ variable "aws_account_id" {
   description = "ID of the aws account"
 }
 
-/*
-variable "s3_bucket_name" {
-  type      = string
-  nullable  = false
-  sensitive = true
-  default   = "project_deployment_mgmt_tfstate_caudt1"
-}
-*/
