@@ -110,6 +110,59 @@ variable "bastion_private_key_file_path" {
   description = "Path to save the .pem key file. Example: secr/locked/keys/this-is-the-key.pem"
 }
 
+variable "bastion_volume_size" {
+  type        = number
+  sensitive   = false
+  nullable    = true
+  default     = 20
+  description = "Size of OS disk of Bastion host upon launching the instance"
+}
+
+variable "bastion_volume_type" {
+  type        = string
+  sensitive   = false
+  nullable    = false
+  description = "Volume type of the OS disk of Bastion host"
+}
+
+variable "bastion_ebs_delete_on_termination" {
+  type        = bool
+  sensitive   = false
+  default     = true
+  description = "This option specifies that if ebs of instance should be deleted when instance is terminated or not"
+}
+
+variable "bastion_market_type" {
+  type        = string
+  sensitive   = false
+  default     = "on-demand"
+  description = "Market type of Bastion host EC2 instance, can only be spot or on-demand"
+  validation {
+    condition     = contains(["on-demand", "spot"], var.bastion_market_type)
+    error_message = "Only on-demand or spot is allowed!"
+  }
+}
+
+variable "bastion_spot_instance_type" {
+  type        = string
+  sensitive   = false
+  description = "Option to decide wether spot instance should be restarted once or always, can only be one-time or persistent"
+  validation {
+    condition     = contains(["one-time", "persistent"], var.bastion_spot_instance_type)
+    error_message = "Only one-time or persistent is allowed"
+  }
+}
+
+variable "bastion_interruption_behavior" {
+  type        = string
+  sensitive   = false
+  description = "Option to decide behavior of spot instance when it is interrupted, can only be terminate or stop or hibernate"
+  validation {
+    condition     = contains(["terminate", "stop", "hibernate"], var.bastion_interruption_behavior)
+    error_message = "Only terminate or stop or hibernate is allowed"
+  }
+}
+
 #-----NAT_GATEWAY
 variable "nat_gateway_desired_destination_cidr_block" {
   type        = string

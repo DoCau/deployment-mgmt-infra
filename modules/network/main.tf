@@ -128,6 +128,24 @@ resource "aws_instance" "bastion_host" {
   key_name        = aws_key_pair.bastion.key_name
   security_groups = [var.bastion_security_group_id]
 
+  root_block_device {
+    volume_size           = var.bastion_volume_size
+    volume_type           = var.bastion_volume_type
+    delete_on_termination = var.bastion_ebs_delete_on_termination
+  }
+
+  instance_market_options {
+    market_type = var.bastion_market_type
+
+    dynamic "spot_options" {
+      for_each = (var.bastion_market_type == "spot") ? [1] : []
+      content {
+        spot_instance_type             = var.bastion_spot_instance_type
+        instance_interruption_behavior = var.bastion_interruption_behavior
+      }
+    }
+  }
+
   tags = {
     "Name"         = "${var.project_name}-${var.environment}-bastion"
     "Last_updated" = module.utils.last_updated

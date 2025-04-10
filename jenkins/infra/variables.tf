@@ -231,7 +231,7 @@ variable "jenkins_master_market_type" {
 variable "jenkins_master_spot_instance_type" {
   type        = string
   sensitive   = false
-  description = "Option to decide wether spot instance should be restarted once or always, can only be on-time or persistent"
+  description = "Option to decide wether spot instance should be restarted once or always, can only be one-time or persistent"
   validation {
     condition     = contains(["one-time", "persistent"], var.jenkins_master_spot_instance_type)
     error_message = "Only one-time or persistent is allowed"
@@ -262,7 +262,7 @@ variable "jenkins_worker_market_type" {
 variable "jenkins_worker_spot_instance_type" {
   type        = string
   sensitive   = false
-  description = "Option to decide wether spot instance should be restarted once or always, can only be on-time or persistent"
+  description = "Option to decide wether spot instance should be restarted once or always, can only be one-time or persistent"
   validation {
     condition     = contains(["one-time", "persistent"], var.jenkins_worker_spot_instance_type)
     error_message = "Only one-time or persistent is allowed"

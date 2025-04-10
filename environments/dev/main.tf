@@ -35,6 +35,14 @@ module "network" {
   bastion_host_ami           = var.bastion_host_ami
   bastion_host_instance_type = var.bastion_host_instance_type
 
+  bastion_volume_size               = var.bastion_volume_size
+  bastion_volume_type               = var.bastion_volume_type
+  bastion_ebs_delete_on_termination = var.bastion_ebs_delete_on_termination
+
+  bastion_market_type           = var.bastion_market_type
+  bastion_spot_instance_type    = var.bastion_spot_instance_type
+  bastion_interruption_behavior = var.bastion_interruption_behavior
+
   bastion_security_group_id = module.security_groups.bastion_security_group_id
 
   bastion_public_key_file_path  = var.bastion_public_key_file_path
