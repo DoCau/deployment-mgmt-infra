@@ -181,6 +181,24 @@ resource "aws_instance" "jenkins_master" {
   security_groups = [aws_security_group.jenkins_master.id]
   subnet_id       = aws_subnet.public.id
 
+  root_block_device {
+    volume_size           = var.jenkins_master_volume_size
+    volume_type           = var.jenkins_master_volume_type
+    delete_on_termination = var.jenkins_master_ebs_delete_on_termination
+  }
+
+  instance_market_options {
+    market_type = var.jenkins_master_market_type
+
+    dynamic "spot_options" {
+      for_each = (var.jenkins_master_market_type == "spot") ? [1] : []
+      content {
+        spot_instance_type             = var.jenkins_master_spot_instance_type
+        instance_interruption_behavior = var.jenkins_master_interruption_behavior
+      }
+    }
+  }
+
   tags = {
     "Name"         = "${var.project_name}-jenkins-master-ec2"
     "Last_updated" = module.utils.last_updated
@@ -283,7 +301,19 @@ resource "aws_instance" "jenkins_worker" {
   root_block_device {
     volume_size           = var.jenkins_worker_volume_size
     volume_type           = var.jenkins_worker_volume_type
-    delete_on_termination = true
+    delete_on_termination = var.jenkins_worker_ebs_delete_on_termination
+  }
+
+  instance_market_options {
+    market_type = var.jenkins_worker_market_type
+
+    dynamic "spot_options" {
+      for_each = (var.jenkins_worker_market_type == "spot") ? [1] : []
+      content {
+        spot_instance_type             = var.jenkins_worker_spot_instance_type
+        instance_interruption_behavior = var.jenkins_worker_interruption_behavior
+      }
+    }
   }
 
   tags = {

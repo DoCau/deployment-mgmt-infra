@@ -188,3 +188,93 @@ variable "jenkins_worker_volume_type" {
   description = "Volume type of the OS disk of Jenkins worker"
 }
 
+variable "jenkins_worker_ebs_delete_on_termination" {
+  type        = bool
+  sensitive   = false
+  default     = true
+  description = "This option specifies that if ebs of instance should be deleted when instance is terminated or not"
+}
+
+variable "jenkins_master_volume_size" {
+  type        = number
+  sensitive   = false
+  nullable    = true
+  default     = 20
+  description = "Size of OS disk of jenkins master upon launching the instance"
+}
+
+variable "jenkins_master_volume_type" {
+  type        = string
+  sensitive   = false
+  nullable    = false
+  description = "Volume type of the OS disk of Jenkins master"
+}
+
+variable "jenkins_master_ebs_delete_on_termination" {
+  type        = bool
+  sensitive   = false
+  default     = true
+  description = "This option specifies that if ebs of instance should be deleted when instance is terminated or not"
+}
+
+variable "jenkins_master_market_type" {
+  type        = string
+  sensitive   = false
+  default     = "on-demand"
+  description = "Market type of Jenkins master EC2 instance, can only be spot or on-demand"
+  validation {
+    condition     = contains(["on-demand", "spot"], var.jenkins_master_market_type)
+    error_message = "Only on-demand or spot is allowed!"
+  }
+}
+
+variable "jenkins_master_spot_instance_type" {
+  type        = string
+  sensitive   = false
+  description = "Option to decide wether spot instance should be restarted once or always, can only be on-time or persistent"
+  validation {
+    condition     = contains(["one-time", "persistent"], var.jenkins_master_spot_instance_type)
+    error_message = "Only one-time or persistent is allowed"
+  }
+}
+
+variable "jenkins_master_interruption_behavior" {
+  type        = string
+  sensitive   = false
+  description = "Option to decide behavior of spot instance when it is interrupted, can only be terminate or stop or hibernate"
+  validation {
+    condition     = contains(["terminate", "stop", "hibernate"], var.jenkins_master_interruption_behavior)
+    error_message = "Only terminate or stop or hibernate is allowed"
+  }
+}
+
+variable "jenkins_worker_market_type" {
+  type        = string
+  sensitive   = false
+  default     = "on-demand"
+  description = "Market type of Jenkins worker EC2 instance, can only be spot or on-demand"
+  validation {
+    condition     = contains(["on-demand", "spot"], var.jenkins_worker_market_type)
+    error_message = "Only on-demand or spot is allowed"
+  }
+}
+
+variable "jenkins_worker_spot_instance_type" {
+  type        = string
+  sensitive   = false
+  description = "Option to decide wether spot instance should be restarted once or always, can only be on-time or persistent"
+  validation {
+    condition     = contains(["one-time", "persistent"], var.jenkins_worker_spot_instance_type)
+    error_message = "Only one-time or persistent is allowed"
+  }
+}
+
+variable "jenkins_worker_interruption_behavior" {
+  type        = string
+  sensitive   = false
+  description = "Option to decide behavior of spot instance when it is interrupted, can only be terminate or stop or hibernate"
+  validation {
+    condition     = contains(["terminate", "stop", "hibernate"], var.jenkins_worker_interruption_behavior)
+    error_message = "Only terminate or stop or hibernate is allowed"
+  }
+}
